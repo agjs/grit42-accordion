@@ -3,7 +3,7 @@
  
 }
 
-.grit42-accordion .grit42-accordion__expander {
+.grit42-accordion__expander {
   list-style-type: none;
   border-bottom: 1px solid black;
   background: #171f2a;
@@ -11,21 +11,19 @@
   &__title {
     color: #fff27f;
   }
-}
 
-.grit42-accordion__expander:hover {
+  &:hover {
   cursor: pointer;
 }
+}
+
 
 .grit42-accordion__items {
   padding: 0;
   list-style-type: none;
   &__item {
     color: #ecedee;
-    &--selected {
-      color: purple;
-    }
-
+   
     &:nth-child(even) {
       background: #1d2532;
     }
@@ -33,7 +31,10 @@
     &:nth-child(odd) {
       background: #242d3c;
     }
-    
+
+    &--selected {
+      color: red;
+      background: #10151d !important;
+    }
   }
-  
 }
