@@ -15,7 +15,6 @@ export default props => {
       setExpanded({
         ...expanded,
         [key]: {
-          ...expanded[key].data,
           expanded: false
         }
       });
@@ -44,11 +43,29 @@ export default props => {
     }
   };
 
+  const collapse = () => {
+    const expanded = {};
+    Object.keys(groupedBySetup).forEach(key => {
+      expanded[key] = {
+        data: groupedBySetup[key],
+        expanded: true
+      };
+    });
+
+    setExpanded({
+      ...expanded
+    });
+  };
+
+  const uncollapse = () => {
+    setExpanded({});
+  };
   const handleDeselectAll = () => {
     setSelected({});
   };
 
   const isSelected = Object.keys(selected).length > 0;
+  const isExpanded = Object.keys(expanded).length > 0;
 
   /**
    * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
@@ -111,6 +128,11 @@ export default props => {
         })}
       </ul>
       {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
+      {isExpanded ? (
+        <button onClick={uncollapse}>Uncollapse</button>
+      ) : (
+        <button onClick={collapse}>Collapse</button>
+      )}
     </>
   );
 };
