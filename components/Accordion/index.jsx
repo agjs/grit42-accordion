@@ -85,6 +85,12 @@ export default props => {
 
   return (
     <>
+      {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
+      {isExpanded ? (
+        <button onClick={uncollapse}>Uncollapse</button>
+      ) : (
+        <button onClick={collapse}>Collapse</button>
+      )}
       <ul className="grit42-accordion">
         {Object.keys(groupedBySetup).map(key => {
           return (
@@ -127,12 +133,6 @@ export default props => {
           );
         })}
       </ul>
-      {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
-      {isExpanded ? (
-        <button onClick={uncollapse}>Uncollapse</button>
-      ) : (
-        <button onClick={collapse}>Collapse</button>
-      )}
     </>
   );
 };
