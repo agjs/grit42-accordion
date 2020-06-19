@@ -8,7 +8,7 @@ export default props => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
 
-  const groupedBySetup = groupBy(props.data, "setup_id__name");
+  const groupedBySetup = groupBy(props.data, props.groupBy);
 
   const handleExpand = (key, data) => {
     if (expanded[key] && expanded[key].expanded) {
@@ -43,6 +43,10 @@ export default props => {
     }
   };
 
+  const handleDeselectAll = () => {
+    setSelected({});
+  };
+
   const collapse = () => {
     const expanded = {};
     Object.keys(groupedBySetup).forEach(key => {
@@ -59,9 +63,6 @@ export default props => {
 
   const uncollapse = () => {
     setExpanded({});
-  };
-  const handleDeselectAll = () => {
-    setSelected({});
   };
 
   const isSelected = Object.keys(selected).length > 0;

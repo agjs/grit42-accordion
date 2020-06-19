@@ -18,7 +18,13 @@ class App extends Component {
   };
 
   render() {
-    return <Accordion getSelected={this.getSelected} data={Data.data} />;
+    return (
+      <Accordion
+        getSelected={this.getSelected}
+        data={Data.data}
+        groupBy="setup_id__name"
+      />
+    );
   }
 }
 
