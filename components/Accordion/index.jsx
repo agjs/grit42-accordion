@@ -49,6 +49,7 @@ export default props => {
 
   const collapse = () => {
     const expanded = {};
+    // TODO: Use reduce here
     Object.keys(groupedBySetup).forEach(key => {
       expanded[key] = {
         data: groupedBySetup[key],
