@@ -9,21 +9,34 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      name: "React"
+      name: "React",
+      selected: []
     };
   }
 
   getSelected = selected => {
-    console.log(selected);
+    this.setState({ selected });
   };
 
   render() {
     return (
-      <Accordion
-        getSelected={this.getSelected}
-        data={Data.data}
-        groupBy="setup_id__name"
-      />
+      <>
+        <Accordion
+          getSelected={this.getSelected}
+          data={Data.data}
+          groupBy="setup_id__name"
+        />
+        {this.state.selected.length > 0 && (
+          <div className="demo">
+            <h1>Demo - Selected</h1>
+            <pre>
+              {this.state.selected.map(item => {
+                return JSON.stringify(item, undefined, 2);
+              })}
+            </pre>
+          </div>
+        )}
+      </>
     );
   }
 }
