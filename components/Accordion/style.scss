@@ -1,0 +1,19 @@
+.grit42-accordion, ul, li {
+  padding: 0;
+ 
+}
+
+.grit42-accordion .grit42-accordion__expander {
+  list-style-type: none;
+  border-bottom: 1px solid black;
+  padding: 5px 0;
+  margin-bottom: 10px;
+
+  &__title {
+    color: red;
+  }
+}
+
+.grit42-accordion__expander:hover {
+  cursor: pointer;
+}
