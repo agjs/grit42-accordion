@@ -1,6 +1,5 @@
 .grit42-accordion {
   padding: 0;
- 
 }
 
 .grit42-accordion__expander {
@@ -19,17 +18,16 @@
   }
 
   &:hover {
-  cursor: pointer;
+    cursor: pointer;
+  }
 }
-}
-
 
 .grit42-accordion__items {
   padding: 0;
   list-style-type: none;
   &__item {
     color: #ecedee;
-   
+
     &:nth-child(even) {
       background: #1d2532;
     }
