@@ -4,17 +4,6 @@ import className from "classnames";
 
 import "./style.scss";
 
-/**
- * Items which belong to different setups cannot be selected
- * So a smart thing to do would be to gray out some of the selection
- * if user has selected specific setup
- * e.g. if I choose 3 items from 1 setup, items from other setups should be
- * grayed out with a tooltip explaining why
- *
- * I should add some indicators when something inside of some setup is selected. In the current implementation, that can become confusing because you can select items and minimize the group, not really seeing what is selected and where
- *
- */
-
 export default props => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
@@ -62,7 +51,7 @@ export default props => {
   const isSelected = Object.keys(selected).length > 0;
 
   /**
-   * A result is selectable if either no selection are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
+   * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
    */
   const isSelectable = result => {
     return (
@@ -72,8 +61,6 @@ export default props => {
           .length > 0)
     );
   };
-
-  // {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
 
   useEffect(() => {
     props.getSelected(Object.values(selected));
@@ -123,6 +110,7 @@ export default props => {
           );
         })}
       </ul>
+      {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
     </>
   );
 };
