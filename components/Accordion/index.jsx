@@ -19,12 +19,12 @@ export default props => {
   const groupedBySetup = groupBy(props.data, "setup_id__name");
 
   const handleExpand = (key, data) => {
-    if (expanded[key] && expanded[key].selected) {
+    if (expanded[key] && expanded[key].expanded) {
       setExpanded({
         ...expanded,
         [key]: {
-          data,
-          selected: false
+          ...expanded[key].data,
+          expanded: false
         }
       });
     } else {
@@ -32,15 +32,25 @@ export default props => {
         ...expanded,
         [key]: {
           data,
-          selected: true
+          expanded: true
         }
       });
     }
   };
 
-  const handleSelect = event => {
-    event.stopPropagation();
-    console.log("selecting");
+  const handleSelect = (key, result) => {
+    if (selected[result.id]) {
+      delete selected[result.id];
+      setSelected({
+        ...selected
+      });
+    } else {
+      setSelected({
+        ...selected,
+        [result.id]: result
+      });
+    }
+    console.log(selected)
   };
 
   return (
@@ -55,10 +65,22 @@ export default props => {
             <span className={className("grit42-accordion__expander__title")}>
               {key}
             </span>
-            {expanded[key] && expanded[key].selected && (
-              <ul>
-                {expanded[key].data.map(li => (
-                  <li onClick={handleSelect}>{li.name}</li>
+            {expanded[key] && expanded[key].expanded && (
+              <ul className={className("grit42-accordion__items")}>
+                {expanded[key].data.map((result, index) => (
+                  <li
+                    className={className("grit42-accordion__items__item", {
+                      "grit42-accordion__items__item--selected":
+                        selected[result.id]
+                    })}
+                    key={`${result.name}-${index}`}
+                    onClick={event => {
+                      event.stopPropagation();
+                      handleSelect(key, result);
+                    }}
+                  >
+                    {result.name}
+                  </li>
                 ))}
               </ul>
             )}

@@ -1,4 +1,4 @@
-.grit42-accordion, ul, li {
+.grit42-accordion {
   padding: 0;
  
 }
@@ -16,4 +16,14 @@
 
 .grit42-accordion__expander:hover {
   cursor: pointer;
+}
+
+.grit42-accordion__items {
+  list-style-type: square;
+  &__item {
+    color: green;
+    &--selected {
+      color: purple;
+    }
+  }
 }
