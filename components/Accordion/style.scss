@@ -12,6 +12,10 @@
     color: #fff27f;
     display: flex;
     justify-content: space-between;
+    &--count {
+      color: #fff;
+      font-size: 12px;
+    }
   }
 
   &:hover {

@@ -111,7 +111,11 @@ export default props => {
             >
               <div className={className("grit42-accordion__expander__title")}>
                 <span>{key}</span>
-                {showSelectedCount && <span>{`${selectedLength} selected`}</span>}
+                {showSelectedCount && (
+                  <span
+                    className={className("grit42-accordion__expander__title--count")}
+                  >{`${selectedLength} selected`}</span>
+                )}
               </div>
               {expanded[key] && expanded[key].expanded && (
                 <ul className={className("grit42-accordion__items")}>
