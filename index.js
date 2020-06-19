@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import "./style.css";
 
 import Accordion from "./components/Accordion";
-import Data from './dummy.json';
+import Data from "./dummy.json";
 
 class App extends Component {
   constructor() {
@@ -13,8 +13,12 @@ class App extends Component {
     };
   }
 
+  getSelected = selected => {
+    console.log(selected);
+  };
+
   render() {
-    return <Accordion data={Data.data} />;
+    return <Accordion getSelected={this.getSelected} data={Data.data} />;
   }
 }
 

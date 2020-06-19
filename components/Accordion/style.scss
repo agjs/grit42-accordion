@@ -36,5 +36,9 @@
       color: red;
       background: #10151d !important;
     }
+    &--unselectable {
+      cursor: not-allowed;
+      color: gray !important;
+    }
   }
 }
