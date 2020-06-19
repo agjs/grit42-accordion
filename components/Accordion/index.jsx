@@ -61,9 +61,11 @@ export default props => {
 
   const isSelected = Object.keys(selected).length > 0;
 
+  // {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
+
   return (
     <>
-      {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
+      
       <ul className="grit42-accordion">
         {Object.keys(groupedBySetup).map(key => {
           return (
