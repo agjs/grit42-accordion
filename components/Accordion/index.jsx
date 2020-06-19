@@ -71,9 +71,10 @@ export default props => {
    * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
    */
   const isSelectable = result => {
+    const selectedLength = Object.keys(selected).length;
     return (
-      Object.keys(selected).length === 0 ||
-      (Object.keys(selected).length > 0 &&
+      selectedLength === 0 ||
+      (selectedLength > 0 &&
         Object.values(selected).filter(r => r.setup_id === result.setup_id)
           .length > 0)
     );
