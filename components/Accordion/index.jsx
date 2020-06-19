@@ -96,15 +96,23 @@ export default props => {
       {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
       <ul className="grit42-accordion">
         {Object.keys(groupedBySetup).map(key => {
+          const selectedLength = Object.values(selected).filter(
+            item => item.setup_id__name === key
+          ).length;
+
+          const isExpanded = expanded[key] && expanded[key].expanded;
+          const showSelectedCount = !isExpanded && selectedLength > 0;
+
           return (
             <li
               className={className("grit42-accordion__expander")}
               onClick={event => handleExpand(key, groupedBySetup[key])}
               key={key}
             >
-              <span className={className("grit42-accordion__expander__title")}>
-                {key}
-              </span>
+              <div className={className("grit42-accordion__expander__title")}>
+                <span>{key}</span>
+                {showSelectedCount && <span>{`${selectedLength} selected`}</span>}
+              </div>
               {expanded[key] && expanded[key].expanded && (
                 <ul className={className("grit42-accordion__items")}>
                   {expanded[key].data.map((result, index) => {

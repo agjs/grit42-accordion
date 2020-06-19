@@ -10,6 +10,8 @@
 
   &__title {
     color: #fff27f;
+    display: flex;
+    justify-content: space-between;
   }
 
   &:hover {
