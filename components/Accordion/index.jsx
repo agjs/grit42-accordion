@@ -65,7 +65,7 @@ export default props => {
   };
 
   const isSelected = Object.keys(selected).length > 0;
-  const isExpanded = Object.keys(expanded).length > 0;
+  const isExpanded = Object.keys(expanded).find(key => expanded[key].expanded);
 
   /**
    * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
