@@ -12,7 +12,7 @@ import {
   getFirstCharacter,
 } from './utils';
 
-import { useDidMountEffect } from '../../../custom_hooks';
+import { useDidMountEffect, usePrevious } from '../../../custom_hooks';
 
 export default (props) => {
   const d3Container = useRef(null);
@@ -353,9 +353,14 @@ export default (props) => {
     setRectangleHoverText(rectangles);
   }, []);
 
+  const previousSelected = usePrevious(selectedUnit.value);
+  const previousHeatMapMode = usePrevious(heatMap.mode);
+  const previousHeatMapEnabled = usePrevious(heatMap.enabled);
+
   /**
    * Ran whenever provided dependencies change. "useDidMountEffect" custom hook is used because we
-   * don't want this effect to run on initial render
+   * don't want this effect to run on initial render. Inside of this effect, we compare the previous
+   * and the current state and react accordingly.
    */
   useDidMountEffect(() => {
     if (heatMap.enabled && !selectedUnit.canDisplayHeatMap) {
@@ -364,9 +369,20 @@ export default (props) => {
        * that cannot display a heatmap, we want to revert the heatmap state to disabled.
        */
       setHeatMap({ ...heatMap, enabled: false });
+      return;
     }
-    setGroupText();
-    recolor();
+
+    if (selectedUnit.value !== previousSelected) {
+      setGroupText();
+    }
+
+    if (
+      heatMap.enabled !== previousHeatMapEnabled ||
+      (heatMap.enabled && selectedUnit.value !== previousSelected) ||
+      (heatMap.enabled && heatMap.mode !== previousHeatMapMode)
+    ) {
+      recolor();
+    }
   }, [heatMap.enabled, heatMap.mode, selectedUnit.value]);
 
   return (

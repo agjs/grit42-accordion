@@ -8,3 +8,13 @@ export const useDidMountEffect = (func, deps) => {
     else didMount.current = true;
   }, deps);
 };
+
+export const usePrevious = (value) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
+};
