@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export const heatmapColors = [
   '#df5442',
   '#df5d42',
@@ -307,9 +309,36 @@ export const wellToY = (well) => {
   }
 };
 
+/**
+ * For the sake of avoiding typos, selectors should be used as constants.
+ */
+export const SELECTORS = {
+  CONTAINER: 'grit42-plate-view',
+  SVG: 'grit42-plate-view__svg',
+  RECT: 'rect',
+  RECT_TEXT: 'grit42-plate-view__rect_text',
+  X_AXIS_LABELS: 'grit42-plate-view__x-axis-labels',
+  Y_AXIS_LABELS: 'grit42-plate-view__y-axis-labels',
+  TICK: 'tick',
+  DOMAIN: 'domain',
+  LINE: 'line',
+};
+
+export const getFirstCharacter = (string) => {
+  return string.charAt(0);
+};
+
 export const createLabels = (labelsFromProps, size, fn) => {
   if (labelsFromProps) {
     return labelsFromProps;
   }
   return new Array(size).fill().map((_, index) => fn(index + 1));
+};
+
+export const addEventListener = (parentNode, childNode, eventName, cb) => {
+  if (!childNode) {
+    return d3.select(parentNode).on(eventName, cb);
+  } else {
+    return d3.select(parentNode).selectAll(childNode).on(eventName, cb);
+  }
 };

@@ -1,0 +1,14 @@
+✔ Selection @done (24.6.2020. 11:10:53)
+	✔ Double click on Column @done (24.6.2020. 11:10:49)
+	✔ Double click on Row @done (24.6.2020. 11:10:50)
+	✔ Drag Selection @done (24.6.2020. 11:10:51)
+	✔ Single Item Selection @done (24.6.2020. 11:10:51)
+☐ Hover single Item
+☐ Show text inside rectangles
+
+
+
+☐ QUESTIONS
+	☐ How do we determine the values in a dropdown (%Effects etc). Is this taken from the parameters array?
+	☐ How do we determine where heatmap can be shown? And does logarhitmic/linear work on every heatmap?
+	☐ 

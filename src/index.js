@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { render } from 'react-dom';
 import './style.css';
 
-import PlatePlot from './components/plots/Plate';
+import PlateView from './components/plots/Plate';
 
 import dummy from './test.json';
-import { parameters } from './dummy/index';
+
+import { DATA_SET_SERIES, parameters } from './dummy/index';
 
 const App = () => {
   const [data] = useState(dummy);
@@ -18,13 +19,13 @@ const App = () => {
   };
   return (
     <div>
-      <PlatePlot
+      <PlateView
         onSelect={onSelected}
-        plotData={data}
+        data={DATA_SET_SERIES}
         parameters={parameters}
         properties={[
           { name: '% Effect', value: 'effect', canDisplayHeatMap: false },
-          { name: 'Compound', value: 'compound', canDisplayHeatMap: false },
+          { name: 'Compound', value: 'compound', canDisplayHeatMap: true },
           { name: 'Concentration', value: 'concentration', canDisplayHeatMap: true },
           {
             name: 'Concentration Normalized',
@@ -38,7 +39,7 @@ const App = () => {
           },
           {
             name: 'Singal without background % (delta F)',
-            value: 'singal_without_background',
+            value: 'signal_wo_background',
             canDisplayHeatMap: true,
           },
           {
@@ -48,8 +49,8 @@ const App = () => {
           },
           {
             name: 'Well Layout',
-            value: 'well_layout',
-            canDisplayHeatMap: false,
+            value: 'welllayout',
+            canDisplayHeatMap: true,
           },
         ]}
       />

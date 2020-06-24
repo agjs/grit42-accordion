@@ -1,15 +1,20 @@
-
-.grit42-plate-plot {
+.grit42-plate-view {
   user-select: none;
 }
 
-.grit42-plate-plot .ds-selected {
-  opacity: 0.7;
+.grit42-plate-view .ds-selected {
+  opacity: 0.4;
   filter: brightness(85%);
 }
 
-.grit42-plate-plot .tick {
+.grit42-plate-view .tick {
   color: #a4a4a6;
   font-weight: bold;
 }
 
+.grit42-plate-view__rect_text {
+  fill: black;
+  font-size: 4px;
+  alignment-baseline: central;
+  text-anchor: middle;
+}
