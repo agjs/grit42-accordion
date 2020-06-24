@@ -378,8 +378,8 @@ export default (props) => {
 
     if (
       heatMap.enabled !== previousHeatMapEnabled ||
-      (heatMap.enabled && selectedUnit.value !== previousSelected) ||
-      (heatMap.enabled && heatMap.mode !== previousHeatMapMode)
+      (heatMap.enabled &&
+        (selectedUnit.value !== previousSelected || heatMap.mode !== previousHeatMapMode))
     ) {
       recolor();
     }
