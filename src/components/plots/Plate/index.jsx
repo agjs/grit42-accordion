@@ -363,6 +363,10 @@ export default (props) => {
    * and the current state and react accordingly.
    */
   useDidMountEffect(() => {
+    if (selectedUnit.value !== previousSelected) {
+      setGroupText();
+    }
+
     if (heatMap.enabled && !selectedUnit.canDisplayHeatMap) {
       /**
        * If user enables a heatmap for a specific entry and then switches back to an entry
@@ -370,10 +374,6 @@ export default (props) => {
        */
       setHeatMap({ ...heatMap, enabled: false });
       return;
-    }
-
-    if (selectedUnit.value !== previousSelected) {
-      setGroupText();
     }
 
     if (
