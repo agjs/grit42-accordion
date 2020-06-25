@@ -146,7 +146,7 @@ export default (props) => {
   };
 
   const getRectangleColor = (d, minMax) => {
-    const getHeatColor = d3
+    const heatMapColorScale = d3
       .scaleLinear()
       .domain(d3.range(0, 1, 1.0 / (COLORS.heat.length - 1)))
       .range(COLORS.heat);
@@ -156,9 +156,13 @@ export default (props) => {
     } else {
       if (heatMap.enabled) {
         if (heatMap.mode === 'linear') {
-          return getHeatColor(d3.scaleLinear().domain(minMax).range([0, 1])(d[selectedUnit.value]));
+          return heatMapColorScale(
+            d3.scaleLinear().domain(minMax).range([0, 1])(d[selectedUnit.value]),
+          );
         } else if (heatMap.mode === 'logarithmic') {
-          return getHeatColor(d3.scaleLog().domain(minMax).range([0, 1])(d[selectedUnit.value]));
+          return heatMapColorScale(
+            d3.scaleLog().domain(minMax).range([0, 1])(d[selectedUnit.value]),
+          );
         }
       } else {
         if (COLORS.named[d['welllayout__name']]) {
@@ -268,6 +272,7 @@ export default (props) => {
       .attr('height', yAxis.bandwidth());
 
     rectangles.style('fill', (d) => getRectangleColor(d, minMax));
+
     return rectangles;
   };
 
@@ -280,7 +285,10 @@ export default (props) => {
   const recolor = () => {
     const svg = d3.select(d3Container.current).selectAll(SELECTORS.RECT);
     const minMax = getMinMax();
-    svg.style('fill', (d) => getRectangleColor(d, minMax));
+    svg
+      .transition()
+      .duration(1000)
+      .style('fill', (d) => getRectangleColor(d, minMax));
   };
 
   /**
