@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Icon } from "@blueprintjs/core";
 import { groupBy } from "lodash";
 import className from "classnames";
 
 import "./style.scss";
 
-export default props => {
+export default (props) => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
 
@@ -15,16 +16,16 @@ export default props => {
       setExpanded({
         ...expanded,
         [key]: {
-          expanded: false
-        }
+          expanded: false,
+        },
       });
     } else {
       setExpanded({
         ...expanded,
         [key]: {
           data,
-          expanded: true
-        }
+          expanded: true,
+        },
       });
     }
   };
@@ -33,12 +34,12 @@ export default props => {
     if (selected[result.id]) {
       delete selected[result.id];
       setSelected({
-        ...selected
+        ...selected,
       });
     } else {
       setSelected({
         ...selected,
-        [result.id]: result
+        [result.id]: result,
       });
     }
   };
@@ -50,15 +51,15 @@ export default props => {
   const collapse = () => {
     const expanded = {};
     // TODO: Use reduce here
-    Object.keys(groupedBySetup).forEach(key => {
+    Object.keys(groupedBySetup).forEach((key) => {
       expanded[key] = {
         data: groupedBySetup[key],
-        expanded: true
+        expanded: true,
       };
     });
 
     setExpanded({
-      ...expanded
+      ...expanded,
     });
   };
 
@@ -67,17 +68,19 @@ export default props => {
   };
 
   const isSelected = Object.keys(selected).length > 0;
-  const isExpanded = Object.keys(expanded).find(key => expanded[key].expanded);
+  const isExpanded = Object.keys(expanded).find(
+    (key) => expanded[key].expanded
+  );
 
   /**
    * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
    */
-  const isSelectable = result => {
+  const isSelectable = (result) => {
     const selectedLength = Object.keys(selected).length;
     return (
       selectedLength === 0 ||
       (selectedLength > 0 &&
-        Object.values(selected).filter(r => r.setup_id === result.setup_id)
+        Object.values(selected).filter((r) => r.setup_id === result.setup_id)
           .length > 0)
     );
   };
@@ -94,10 +97,15 @@ export default props => {
         <button onClick={collapse}>Collapse</button>
       )}
       {isSelected && <button onClick={handleDeselectAll}>Deselect all</button>}
+
       <ul className="grit42-accordion">
-        {Object.keys(groupedBySetup).map(key => {
+        <h4 className="grit42-accordion__headline">
+          <Icon icon="info-sign" />
+          {props.headline}
+        </h4>
+        {Object.keys(groupedBySetup).map((key, testIndex) => {
           const selectedLength = Object.values(selected).filter(
-            item => item.setup_id__name === key
+            (item) => item.setup_id__name === key
           ).length;
 
           const isExpanded = expanded[key] && expanded[key].expanded;
@@ -106,15 +114,23 @@ export default props => {
           return (
             <li
               className={className("grit42-accordion__expander")}
-              onClick={event => handleExpand(key, groupedBySetup[key])}
+              onClick={(event) => handleExpand(key, groupedBySetup[key])}
+              onKeyPress={(event) => {
+                if (event.which === 32) {
+                  handleExpand(key, groupedBySetup[key]);
+                }
+              }}
               key={key}
+              tabIndex={testIndex + 1}
             >
-              <div className={className("grit42-accordion__expander__title")}>
+              <div
+                className={className("grit42-accordion__expander__title", {
+                  "grit42-accordion__expander__title--count": showSelectedCount,
+                })}
+              >
                 <span>{key}</span>
                 {showSelectedCount && (
-                  <span
-                    className={className("grit42-accordion__expander__title--count")}
-                  >{`${selectedLength} selected`}</span>
+                  <span>{`${selectedLength} selected`}</span>
                 )}
               </div>
               {expanded[key] && expanded[key].expanded && (
@@ -126,16 +142,16 @@ export default props => {
                         className={className("grit42-accordion__items__item", {
                           "grit42-accordion__items__item--selected":
                             selected[result.id],
-                          "grit42-accordion__items__item--unselectable": !canSelect
+                          "grit42-accordion__items__item--unselectable": !canSelect,
                         })}
                         key={`${result.name}-${index}`}
                         onClick={
                           canSelect
-                            ? event => {
+                            ? (event) => {
                                 event.stopPropagation();
                                 handleSelect(key, result);
                               }
-                            : event => event.stopPropagation()
+                            : (event) => event.stopPropagation()
                         }
                       >
                         {result.name}

@@ -23,6 +23,7 @@ class App extends Component {
       <>
         <Accordion
           getSelected={this.getSelected}
+          headline="Setups"
           data={Data.data}
           groupBy="setup_id__name"
         />

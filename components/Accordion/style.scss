@@ -1,19 +1,36 @@
 .grit42-accordion {
   padding: 0;
+  font-family: Sintony, sans-serif;
+
+  &__headline {
+    background: #171e2a;
+    margin: 0;
+    padding: 10px;
+    .bp3-icon {
+      margin-right: 7px;
+    }
+  }
 }
 
 .grit42-accordion__expander {
   list-style-type: none;
-  border-bottom: 1px solid black;
-  background: #171f2a;
+  border-bottom: 1px solid #242d3c;
+  background: #1d2532;
 
   &__title {
-    color: #fff27f;
+    color: #fff;
     display: flex;
     justify-content: space-between;
+    padding: 10px 10px;
     &--count {
       color: #fff;
-      font-size: 12px;
+      line-height: 29.2px;
+
+      span:last-child {
+        color: gray;
+        font-size: 12px;
+        user-select: none;
+      }
     }
   }
 
@@ -27,6 +44,9 @@
   list-style-type: none;
   &__item {
     color: #ecedee;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
 
     &:nth-child(even) {
       background: #1d2532;
@@ -37,8 +57,8 @@
     }
 
     &--selected {
-      color: red;
-      background: #10151d !important;
+      color: #fff;
+      background: #171e2a !important;
     }
     &--unselectable {
       cursor: not-allowed;
