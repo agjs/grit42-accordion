@@ -27,16 +27,6 @@ class App extends Component {
           data={Data.data}
           groupBy="setup_id__name"
         />
-        {this.state.selected.length > 0 && (
-          <div className="demo">
-            <h1>Demo - Selected</h1>
-            <pre>
-              {this.state.selected.map(item => {
-                return JSON.stringify(item, undefined, 2);
-              })}
-            </pre>
-          </div>
-        )}
       </>
     );
   }
