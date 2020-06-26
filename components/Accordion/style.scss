@@ -29,15 +29,16 @@
   background: #1d2532;
   margin-bottom: 5px;
   border-radius: 4px;
-
+ 
   &__title {
     color: #fff;
     display: flex;
     justify-content: space-between;
     padding: 10px 10px;
 
+
     &--count {
-      color: #fff;
+      color: #fbee7d;
 
       span:last-child {
         color: gray;
