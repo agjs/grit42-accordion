@@ -149,16 +149,22 @@ export default props => {
                             : event => event.stopPropagation()
                         }
                       >
-                        {!canSelect ? (
-                          <Tooltip
-                            content="Only entries from a single setup can be selected at once."
-                            position={Position.LEFT}
-                          >
-                            {result.name}
-                          </Tooltip>
-                        ) : (
-                          result.name
-                        )}
+                        <div
+                          className={className(
+                            "grit42-accordion__items__item__content"
+                          )}
+                        >
+                          {!canSelect ? (
+                            <Tooltip
+                              content="Only entries from a single setup can be selected at once."
+                              position={Position.LEFT}
+                            >
+                              {result.name}
+                            </Tooltip>
+                          ) : (
+                            result.name
+                          )}
+                        </div>
                       </li>
                     );
                   })}
