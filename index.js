@@ -20,14 +20,15 @@ class App extends Component {
 
   render() {
     return (
-      <>
+      <div className="demo">
         <Accordion
           getSelected={this.getSelected}
           headline="Setups"
           data={Data.data}
           groupBy="setup_id__name"
         />
-      </>
+        <div>right</div>
+      </div>
     );
   }
 }

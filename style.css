@@ -8,6 +8,5 @@ html {
 }
 
 .demo {
-  color: white;
-  font-size: 10px;
+  display: flex;
 }
