@@ -1,6 +1,5 @@
 .grit42-accordion {
   padding: 0;
-  font-family: Sintony, sans-serif;
 
   &__headline {
     background: #171e2a;
@@ -14,14 +13,18 @@
 
 .grit42-accordion__expander {
   list-style-type: none;
-  border-bottom: 1px solid #242d3c;
   background: #1d2532;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  outline: none;
 
   &__title {
     color: #fff;
     display: flex;
     justify-content: space-between;
     padding: 10px 10px;
+  
+
     &--count {
       color: #fff;
       line-height: 29.2px;
@@ -44,21 +47,19 @@
   list-style-type: none;
   &__item {
     color: #ecedee;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 30px;
-
-    &:nth-child(even) {
-      background: #1d2532;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background: #1d2532;
+    user-select: none;
+    &:not(:first-child) {
+      border-top: 1px solid #2e3541;
     }
 
-    &:nth-child(odd) {
-      background: #242d3c;
-    }
 
     &--selected {
-      color: #fff;
-      background: #171e2a !important;
+      color: #fbee7d;
     }
     &--unselectable {
       cursor: not-allowed;

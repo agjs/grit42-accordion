@@ -130,7 +130,7 @@ export default (props) => {
               >
                 <span>{key}</span>
                 {showSelectedCount && (
-                  <span>{`${selectedLength} selected`}</span>
+                  <span>{`${selectedLength}`}</span>
                 )}
               </div>
               {expanded[key] && expanded[key].expanded && (
