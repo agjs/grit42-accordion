@@ -1,7 +1,9 @@
 // @import '~@blueprintjs/core/src/blueprint.scss';
 
 .grit42-accordion {
- 
+  * {
+    // user-select: none;
+  }
   padding: 0;
   width: 350px;
   &__headline {
@@ -30,7 +32,6 @@
   &:focus {
     border: 1px solid #57616E;
     outline: none;
-
   }
 
   &__title {
@@ -58,6 +59,11 @@
   padding: 0;
   list-style-type: none;
   &__item {
+
+  &:focus {
+    border: 1px solid #57616E;
+    outline: none;
+  }
     &__content {
       margin-left: 20px;
       margin-right: 20px;

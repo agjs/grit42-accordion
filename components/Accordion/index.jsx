@@ -3,19 +3,28 @@ import { Icon, Position, Tooltip } from "@blueprintjs/core";
 import { groupBy } from "lodash";
 import className from "classnames";
 
+import { useOutsideAlerter } from "../../utils";
+
+const KEY_CODES = {
+  SPACE: 32,
+  ENTER: 13,
+  ARROW_UP: 38,
+  ARROW_DOWN: 40
+};
+
 import "./style.scss";
 
 export default props => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
-  const [cursor, setCursor] = useState(0);
+  const [pointer, setPointer] = useState(0);
 
   const expanderRef = useRef(null);
 
   const groupedBySetup = groupBy(props.data, props.groupBy);
-  const expandersLength = Object.keys(groupedBySetup).length;
 
-  const handleExpand = (key, data) => {
+  const handleExpand = (key, data, expanderIndex) => {
+    setPointer(expanderIndex);
     if (expanded[key] && expanded[key].expanded) {
       setExpanded({
         ...expanded,
@@ -87,41 +96,79 @@ export default props => {
     );
   };
 
+  const expandersLength = Object.keys(groupedBySetup).length;
+
+  const onKeyPress = (e, length, isExpanded, expanderIndex) => {
+    switch (e.keyCode) {
+      case KEY_CODES.ARROW_UP:
+        if (pointer === 0) {
+          setPointer(length - 1);
+        } else if (+Number((pointer % 1).toFixed(1)) === 0.1) {
+          console.log("ON THE TOP", pointer);
+          setPointer(expanderIndex);
+        } else {
+          console.log("FUCK YOU BITCH");
+          setPointer(
+            isExpanded
+              ? +Number((pointer - 0.1).toFixed(1))
+              : pointer % 1 === 0
+              ? pointer - 1
+              : Math.floor(pointer) - 1
+          );
+        }
+
+        return;
+      case KEY_CODES.ARROW_DOWN:
+        setPointer(
+          isExpanded
+            ? +Number((pointer + 0.1).toFixed(1))
+            : pointer % 1 === 0
+            ? pointer + 1
+            : Math.floor(pointer) + 1
+        );
+
+        return;
+      case KEY_CODES.SPACE:
+      case KEY_CODES.ENTER:
+        console.log(expanderRef.current);
+        if (expanderRef.current) {
+          expanderRef.current.click();
+        }
+
+        return;
+      default:
+        return null;
+    }
+  };
+
   const setFocus = e => {
-    event.preventDefault();
-    if (e.keyCode === 38) {
-      if (cursor === 0) {
-        /**
-         * If at first expander and up key is pressed, go to the end
-         */
-        setCursor(expandersLength - 1);
-      } else {
-        setCursor(cursor - 1);
-      }
-    } else if (e.keyCode === 40) {
-      if (cursor === expandersLength) {
-        /**
-         * If at last expander and down key is pressed, jump to the start
-         */
-        setCursor(0);
-      } else {
-        setCursor(cursor + 1);
-      }
+    if (!expanderRef.current || !expanderRef.current.attributes) {
+      return;
     }
 
-     if (e.keyCode === 32) {
-       if(expanderRef.current) {
-         expanderRef.current.click()
-       }
-     }
+    const {
+      "data-expander-key": key,
+      "data-expander-index": expanderIndex,
+      "data-expander-length": expanderLength
+    } = expanderRef.current.attributes || {};
 
+    const isExpanded = expanded[key.value] && expanded[key.value].expanded;
+    const length = isExpanded ? expanderLength.value : expandersLength;
+
+    onKeyPress(e, +Number(length), isExpanded, +Number(expanderIndex.value));
   };
 
   useEffect(() => {
     if (expanderRef.current !== null) {
       expanderRef.current.focus();
+    } else {
+      /**
+       * If on the last element in the list and keyDown is pressed, reset the pointer back to the beginning
+       */
+      // setPointer(0);
     }
-  }, [cursor]);
+    console.log("pointer", pointer);
+  }, [pointer]);
 
   useEffect(() => {
     props.getSelected(Object.values(selected));
@@ -151,17 +198,15 @@ export default props => {
           return (
             <li
               className={className("grit42-accordion__expander")}
-              onClick={event => handleExpand(key, groupedBySetup[key])}
-              ref={cursor === expanderIndex ? expanderRef : null}
-              onKeyPress={event => {
-                event.stopPropagation();
-                console.log('what')
-                if (event.which === 32) {
-                  handleExpand(key, groupedBySetup[key]);
-                }
-              }}
+              onClick={event =>
+                handleExpand(key, groupedBySetup[key], expanderIndex)
+              }
+              ref={pointer === expanderIndex ? expanderRef : null}
               key={key}
               tabIndex={expanderIndex}
+              data-expander-key={key}
+              data-expander-index={expanderIndex}
+              data-expander-length={groupedBySetup[key].length}
             >
               <div
                 className={className("grit42-accordion__expander__title", {
@@ -173,16 +218,26 @@ export default props => {
               </div>
               {expanded[key] && expanded[key].expanded && (
                 <ul className={className("grit42-accordion__items")}>
-                  {expanded[key].data.map((result, index) => {
+                  {expanded[key].data.map((result, itemIndex) => {
                     const canSelect = isSelectable(result);
                     return (
                       <li
+                        data-expander-key={key}
+                        data-expander-index={itemIndex}
+                        data-expander-length={groupedBySetup[key].length}
+                        ref={
+                          pointer ===
+                          parseFloat(`${expanderIndex}.${itemIndex + 1}`)
+                            ? expanderRef
+                            : null
+                        }
+                        data-expander-index={expanderIndex}
                         className={className("grit42-accordion__items__item", {
                           "grit42-accordion__items__item--selected":
                             selected[result.id],
                           "grit42-accordion__items__item--unselectable": !canSelect
                         })}
-                        key={`${result.name}-${index}`}
+                        key={`${result.name}-${itemIndex + 1}`}
                         onClick={
                           canSelect
                             ? event => {
