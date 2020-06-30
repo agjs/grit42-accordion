@@ -1,10 +1,7 @@
-@import '~@blueprintjs/core/src/blueprint.scss';
+// @import '~@blueprintjs/core/src/blueprint.scss';
 
 .grit42-accordion {
-  * {
-    user-select: none;
-    outline: none;
-  }
+ 
   padding: 0;
   width: 350px;
   &__headline {
@@ -29,6 +26,12 @@
   background: #1d2532;
   margin-bottom: 5px;
   border-radius: 4px;
+
+  &:focus {
+    border: 1px solid #57616E;
+    outline: none;
+
+  }
 
   &__title {
     color: #fff;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Icon, Position, Tooltip } from "@blueprintjs/core";
 import { groupBy } from "lodash";
 import className from "classnames";
@@ -8,8 +8,12 @@ import "./style.scss";
 export default props => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
+  const [cursor, setCursor] = useState(0);
+
+  const expanderRef = useRef(null);
 
   const groupedBySetup = groupBy(props.data, props.groupBy);
+  const expandersLength = Object.keys(groupedBySetup).length;
 
   const handleExpand = (key, data) => {
     if (expanded[key] && expanded[key].expanded) {
@@ -83,13 +87,49 @@ export default props => {
     );
   };
 
+  const setFocus = e => {
+    event.preventDefault();
+    if (e.keyCode === 38) {
+      if (cursor === 0) {
+        /**
+         * If at first expander and up key is pressed, go to the end
+         */
+        setCursor(expandersLength - 1);
+      } else {
+        setCursor(cursor - 1);
+      }
+    } else if (e.keyCode === 40) {
+      if (cursor === expandersLength) {
+        /**
+         * If at last expander and down key is pressed, jump to the start
+         */
+        setCursor(0);
+      } else {
+        setCursor(cursor + 1);
+      }
+    }
+
+     if (e.keyCode === 32) {
+       if(expanderRef.current) {
+         expanderRef.current.click()
+       }
+     }
+
+  };
+
+  useEffect(() => {
+    if (expanderRef.current !== null) {
+      expanderRef.current.focus();
+    }
+  }, [cursor]);
+
   useEffect(() => {
     props.getSelected(Object.values(selected));
   }, [selected]);
 
   return (
     <>
-      <ul className="grit42-accordion">
+      <ul className="grit42-accordion" onKeyDown={setFocus}>
         <h4 className="grit42-accordion__headline">
           <div className="grit42-accordion__headline__icons">
             {isSelected && <Icon onClick={handleDeselectAll} icon="select" />}
@@ -100,7 +140,7 @@ export default props => {
             )}
           </div>
         </h4>
-        {Object.keys(groupedBySetup).map((key, testIndex) => {
+        {Object.keys(groupedBySetup).map((key, expanderIndex) => {
           const selectedLength = Object.values(selected).filter(
             item => item.setup_id__name === key
           ).length;
@@ -112,13 +152,16 @@ export default props => {
             <li
               className={className("grit42-accordion__expander")}
               onClick={event => handleExpand(key, groupedBySetup[key])}
+              ref={cursor === expanderIndex ? expanderRef : null}
               onKeyPress={event => {
+                event.stopPropagation();
+                console.log('what')
                 if (event.which === 32) {
                   handleExpand(key, groupedBySetup[key]);
                 }
               }}
               key={key}
-              tabIndex={testIndex + 1}
+              tabIndex={expanderIndex}
             >
               <div
                 className={className("grit42-accordion__expander__title", {
