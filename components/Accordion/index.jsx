@@ -104,10 +104,8 @@ export default props => {
         if (pointer === 0) {
           setPointer(length - 1);
         } else if (+Number((pointer % 1).toFixed(1)) === 0.1) {
-          console.log("ON THE TOP", pointer);
           setPointer(expanderIndex);
         } else {
-          console.log("FUCK YOU BITCH");
           setPointer(
             isExpanded
               ? +Number((pointer - 0.1).toFixed(1))
@@ -130,11 +128,9 @@ export default props => {
         return;
       case KEY_CODES.SPACE:
       case KEY_CODES.ENTER:
-        console.log(expanderRef.current);
         if (expanderRef.current) {
           expanderRef.current.click();
         }
-
         return;
       default:
         return null;
@@ -165,7 +161,7 @@ export default props => {
       /**
        * If on the last element in the list and keyDown is pressed, reset the pointer back to the beginning
        */
-      // setPointer(0);
+      setPointer(0);
     }
     console.log("pointer", pointer);
   }, [pointer]);
