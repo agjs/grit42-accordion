@@ -104,8 +104,10 @@ export default props => {
         if (pointer === 0) {
           setPointer(length - 1);
         } else if (+Number((pointer % 1).toFixed(1)) === 0.1) {
+          console.log('SHOULD BE FIRST INSIDE');
           setPointer(expanderIndex);
         } else {
+          console.log('NOT FIRST');
           setPointer(
             isExpanded
               ? +Number((pointer - 0.1).toFixed(1))
@@ -142,14 +144,13 @@ export default props => {
       return;
     }
 
-    const {
-      "data-expander-key": key,
-      "data-expander-index": expanderIndex,
-      "data-expander-length": expanderLength
-    } = expanderRef.current.attributes || {};
+    const { "data-expander-key": key, "data-expander-index": expanderIndex } =
+      expanderRef.current.attributes || {};
 
     const isExpanded = expanded[key.value] && expanded[key.value].expanded;
-    const length = isExpanded ? expanderLength.value : expandersLength;
+    const length = isExpanded
+      ? groupedBySetup[key.value] && groupedBySetup[key.value].length
+      : expandersLength;
 
     onKeyPress(e, +Number(length), isExpanded, +Number(expanderIndex.value));
   };
@@ -161,6 +162,7 @@ export default props => {
       /**
        * If on the last element in the list and keyDown is pressed, reset the pointer back to the beginning
        */
+      console.log('HERE IN USE EFFECT, LAST ELEMENT!');
       setPointer(0);
     }
     console.log("pointer", pointer);
@@ -202,7 +204,6 @@ export default props => {
               tabIndex={expanderIndex}
               data-expander-key={key}
               data-expander-index={expanderIndex}
-              data-expander-length={groupedBySetup[key].length}
             >
               <div
                 className={className("grit42-accordion__expander__title", {
@@ -220,14 +221,12 @@ export default props => {
                       <li
                         data-expander-key={key}
                         data-expander-index={itemIndex}
-                        data-expander-length={groupedBySetup[key].length}
                         ref={
                           pointer ===
                           parseFloat(`${expanderIndex}.${itemIndex + 1}`)
                             ? expanderRef
                             : null
                         }
-                        data-expander-index={expanderIndex}
                         className={className("grit42-accordion__items__item", {
                           "grit42-accordion__items__item--selected":
                             selected[result.id],
