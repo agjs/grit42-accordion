@@ -1,0 +1,92 @@
+@import '~@blueprintjs/core/src/blueprint.scss';
+
+.grit42-accordion {
+  * {
+    user-select: none;
+  }
+  padding: 0;
+  width: 350px;
+  &__headline {
+    margin: 0;
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-end;
+    &__icons {
+      color: #fff !important;
+      .bp3-icon {
+        cursor: pointer;
+        :last-child {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+.grit42-accordion__expander {
+  list-style-type: none;
+  background: #1d2532;
+  margin-bottom: 5px;
+  border-radius: 4px;
+
+  &:focus {
+    border: 1px solid #57616e;
+    outline: none;
+  }
+
+  &__title {
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10px;
+
+    &--count {
+      color: #fbee7d;
+
+      span:last-child {
+        color: gray;
+        font-size: 12px;
+      }
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.grit42-accordion__items {
+  padding: 0;
+  list-style-type: none;
+  &__item {
+    &__content {
+      margin-left: 20px;
+      margin-right: 20px;
+      border-top: 1px solid #2e3541;
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
+
+    &:first-child &__content {
+      border-top: 0 !important;
+    }
+
+    color: #ecedee;
+    background: #1d2532;
+    user-select: none;
+
+    &:hover {
+      background: #2e3642;
+    }
+
+    &--selected {
+      color: #fbee7d;
+    }
+    &--keyboard-hover {
+      background: #2e3642;
+    }
+    &--unselectable {
+      cursor: not-allowed;
+      color: gray !important;
+    }
+  }
+}

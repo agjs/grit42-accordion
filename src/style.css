@@ -1,0 +1,12 @@
+h1, p {
+  font-family: Lato;
+}
+
+html {
+  background: #10151d;
+  font-family: 'Roboto', sans-serif;
+}
+
+.demo {
+  display: flex;
+}
