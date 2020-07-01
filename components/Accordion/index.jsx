@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Icon, Position, Tooltip } from "@blueprintjs/core";
-import { groupBy } from "lodash";
-import className from "classnames";
+import React, { useState, useEffect, useRef } from 'react';
+import { Icon, Position, Tooltip } from '@blueprintjs/core';
+import { groupBy } from 'lodash';
+import className from 'classnames';
 
-import { useOutsideAlerter } from "../../utils";
+import './style.scss';
 
 const KEY_CODES = {
   SPACE: 32,
   ENTER: 13,
   ARROW_UP: 38,
-  ARROW_DOWN: 40
+  ARROW_DOWN: 40,
 };
 
-import "./style.scss";
-
-export default props => {
+export default (props) => {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState({});
   const [pointer, setPointer] = useState(0);
@@ -29,16 +27,16 @@ export default props => {
       setExpanded({
         ...expanded,
         [key]: {
-          expanded: false
-        }
+          expanded: false,
+        },
       });
     } else {
       setExpanded({
         ...expanded,
         [key]: {
           data,
-          expanded: true
-        }
+          expanded: true,
+        },
       });
     }
   };
@@ -47,12 +45,12 @@ export default props => {
     if (selected[result.id]) {
       delete selected[result.id];
       setSelected({
-        ...selected
+        ...selected,
       });
     } else {
       setSelected({
         ...selected,
-        [result.id]: result
+        [result.id]: result,
       });
     }
   };
@@ -63,16 +61,15 @@ export default props => {
 
   const collapse = () => {
     const expanded = {};
-    // TODO: Use reduce here
-    Object.keys(groupedBySetup).forEach(key => {
+    Object.keys(groupedBySetup).forEach((key) => {
       expanded[key] = {
         data: groupedBySetup[key],
-        expanded: true
+        expanded: true,
       };
     });
 
     setExpanded({
-      ...expanded
+      ...expanded,
     });
   };
 
@@ -81,52 +78,51 @@ export default props => {
   };
 
   const isSelected = Object.keys(selected).length > 0;
-  const isExpanded = Object.keys(expanded).find(key => expanded[key].expanded);
+  const isExpanded = Object.keys(expanded).find((key) => expanded[key].expanded);
 
   /**
    * A result is selectable if either no selections are still made or if the item that's being selected is the part of the same setup as already selected results. In simple words, only items from the same setup can be selected.
    */
-  const isSelectable = result => {
+  const isSelectable = (result) => {
     const selectedLength = Object.keys(selected).length;
     return (
       selectedLength === 0 ||
       (selectedLength > 0 &&
-        Object.values(selected).filter(r => r.setup_id === result.setup_id)
-          .length > 0)
+        Object.values(selected).filter((r) => r.setup_id === result.setup_id).length > 0)
     );
   };
 
-  const expandersLength = Object.keys(groupedBySetup).length;
-
-  const onKeyPress = (e, length, isExpanded, expanderIndex) => {
+  const handleKeyPress = (e, length, isExpanded, expanderIndex, itemIndex, key) => {
     switch (e.keyCode) {
       case KEY_CODES.ARROW_UP:
         if (pointer === 0) {
           setPointer(length - 1);
-        } else if (+Number((pointer % 1).toFixed(1)) === 0.1) {
-          console.log('SHOULD BE FIRST INSIDE');
-          setPointer(expanderIndex);
         } else {
-          console.log('NOT FIRST');
-          setPointer(
-            isExpanded
-              ? +Number((pointer - 0.1).toFixed(1))
-              : pointer % 1 === 0
-              ? pointer - 1
-              : Math.floor(pointer) - 1
-          );
+          if (isExpanded) {
+            if (!itemIndex) {
+              setPointer(expanderIndex - 1);
+            } else if (itemIndex === 1) {
+              setPointer(expanderIndex);
+            } else {
+              setPointer(`${key}-${itemIndex - 1}`);
+            }
+          } else {
+            setPointer(expanderIndex - 1);
+          }
         }
-
         return;
       case KEY_CODES.ARROW_DOWN:
-        setPointer(
-          isExpanded
-            ? +Number((pointer + 0.1).toFixed(1))
-            : pointer % 1 === 0
-            ? pointer + 1
-            : Math.floor(pointer) + 1
-        );
-
+        if (isExpanded) {
+          if (itemIndex === length) {
+            setPointer(expanderIndex + 1);
+          } else if (typeof pointer === 'number') {
+            setPointer(`${key}-1`);
+          } else {
+            setPointer(`${key}-${itemIndex + 1}`);
+          }
+        } else {
+          setPointer(expanderIndex + 1);
+        }
         return;
       case KEY_CODES.SPACE:
       case KEY_CODES.ENTER:
@@ -139,20 +135,31 @@ export default props => {
     }
   };
 
-  const setFocus = e => {
+  const setFocus = (e) => {
     if (!expanderRef.current || !expanderRef.current.attributes) {
       return;
     }
 
-    const { "data-expander-key": key, "data-expander-index": expanderIndex } =
-      expanderRef.current.attributes || {};
+    const {
+      'data-expander-key': key,
+      'data-expander-index': expanderIndex,
+      'data-item-index': itemIndex,
+    } = expanderRef.current.attributes || {};
 
+    const expandersLength = Object.keys(groupedBySetup).length;
     const isExpanded = expanded[key.value] && expanded[key.value].expanded;
     const length = isExpanded
-      ? groupedBySetup[key.value] && groupedBySetup[key.value].length
+      ? expanded[key.value] && expanded[key.value].data.length
       : expandersLength;
 
-    onKeyPress(e, +Number(length), isExpanded, +Number(expanderIndex.value));
+    handleKeyPress(
+      e,
+      length,
+      isExpanded,
+      +Number(expanderIndex.value),
+      itemIndex && +Number(itemIndex.value),
+      key.value,
+    );
   };
 
   useEffect(() => {
@@ -162,11 +169,9 @@ export default props => {
       /**
        * If on the last element in the list and keyDown is pressed, reset the pointer back to the beginning
        */
-      console.log('HERE IN USE EFFECT, LAST ELEMENT!');
       setPointer(0);
     }
-    console.log("pointer", pointer);
-  }, [pointer]);
+  }, [pointer, expanded, expanderRef.current]);
 
   useEffect(() => {
     props.getSelected(Object.values(selected));
@@ -187,7 +192,7 @@ export default props => {
         </h4>
         {Object.keys(groupedBySetup).map((key, expanderIndex) => {
           const selectedLength = Object.values(selected).filter(
-            item => item.setup_id__name === key
+            (item) => item.setup_id__name === key,
           ).length;
 
           const isExpanded = expanded[key] && expanded[key].expanded;
@@ -195,10 +200,8 @@ export default props => {
 
           return (
             <li
-              className={className("grit42-accordion__expander")}
-              onClick={event =>
-                handleExpand(key, groupedBySetup[key], expanderIndex)
-              }
+              className={className('grit42-accordion__expander')}
+              onClick={(_) => handleExpand(key, groupedBySetup[key], expanderIndex)}
               ref={pointer === expanderIndex ? expanderRef : null}
               key={key}
               tabIndex={expanderIndex}
@@ -206,47 +209,40 @@ export default props => {
               data-expander-index={expanderIndex}
             >
               <div
-                className={className("grit42-accordion__expander__title", {
-                  "grit42-accordion__expander__title--count": showSelectedCount
+                className={className('grit42-accordion__expander__title', {
+                  'grit42-accordion__expander__title--count': showSelectedCount,
                 })}
               >
                 <span>{key}</span>
                 {showSelectedCount && <span>{`${selectedLength}`}</span>}
               </div>
               {expanded[key] && expanded[key].expanded && (
-                <ul className={className("grit42-accordion__items")}>
+                <ul className={className('grit42-accordion__items')}>
                   {expanded[key].data.map((result, itemIndex) => {
                     const canSelect = isSelectable(result);
+                    const index = `${key}-${itemIndex + 1}`;
                     return (
                       <li
                         data-expander-key={key}
-                        data-expander-index={itemIndex}
-                        ref={
-                          pointer ===
-                          parseFloat(`${expanderIndex}.${itemIndex + 1}`)
-                            ? expanderRef
-                            : null
-                        }
-                        className={className("grit42-accordion__items__item", {
-                          "grit42-accordion__items__item--selected":
-                            selected[result.id],
-                          "grit42-accordion__items__item--unselectable": !canSelect
+                        data-expander-index={expanderIndex}
+                        data-item-index={itemIndex + 1}
+                        ref={pointer === index ? expanderRef : null}
+                        className={className('grit42-accordion__items__item', {
+                          'grit42-accordion__items__item--selected': selected[result.id],
+                          'grit42-accordion__items__item--keyboard-hover': pointer === index,
+                          'grit42-accordion__items__item--unselectable': !canSelect,
                         })}
-                        key={`${result.name}-${itemIndex + 1}`}
+                        key={`${result.name}-${itemIndex}`}
                         onClick={
                           canSelect
-                            ? event => {
+                            ? (event) => {
                                 event.stopPropagation();
                                 handleSelect(key, result);
                               }
-                            : event => event.stopPropagation()
+                            : (event) => event.stopPropagation()
                         }
                       >
-                        <div
-                          className={className(
-                            "grit42-accordion__items__item__content"
-                          )}
-                        >
+                        <div className={className('grit42-accordion__items__item__content')}>
                           {!canSelect ? (
                             <Tooltip
                               content="Only entries from a single setup can be selected at once."

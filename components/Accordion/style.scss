@@ -1,4 +1,4 @@
-// @import '~@blueprintjs/core/src/blueprint.scss';
+@import '~@blueprintjs/core/src/blueprint.scss';
 
 .grit42-accordion {
   * {
@@ -22,7 +22,6 @@
     }
   }
 }
-
 .grit42-accordion__expander {
   list-style-type: none;
   background: #1d2532;
@@ -30,7 +29,7 @@
   border-radius: 4px;
 
   &:focus {
-    border: 1px solid #57616E;
+    border: 1px solid #57616e;
     outline: none;
   }
 
@@ -59,14 +58,12 @@
   padding: 0;
   list-style-type: none;
   &__item {
-
     &__content {
       margin-left: 20px;
       margin-right: 20px;
       border-top: 1px solid #2e3541;
       padding-bottom: 10px;
       padding-top: 10px;
-
     }
 
     &:first-child &__content {
@@ -84,10 +81,12 @@
     &--selected {
       color: #fbee7d;
     }
+    &--keyboard-hover {
+      background: #2e3642;
+    }
     &--unselectable {
       cursor: not-allowed;
       color: gray !important;
     }
   }
 }
-
