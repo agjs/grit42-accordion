@@ -1,0 +1,25 @@
+@import 'reset-css';
+
+.grit42-sidebar-layout {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+
+  .bm-menu-wrap {
+    :focus {
+      outline: none !important;
+    }
+  }
+
+  &__sidebar {
+    overflow: hidden !important;
+  }
+  &__content {
+    width: 65%;
+    transform: translate3d(0%, 0px, 0px) !important;
+
+    &--full {
+      width: 100%;
+    }
+  }
+}
